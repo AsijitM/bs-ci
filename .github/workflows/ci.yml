@@ -1,3 +1,17 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  actions: read
+  contents: read
+
 jobs:
   main:
     runs-on: ubuntu-latest
@@ -22,7 +36,7 @@ jobs:
       - name: Retry flaky tests
         run: |
           echo "Checking for flaky tests..."
-          # Assume Jest outputs test results to jest-failures.json
+          # Simulated retry logic. Replace with your real test reporting
           if [ -f jest-failures.json ]; then
             failed_projects=$(jq -r '.testResults[] | select(.status=="failed") | .name' jest-failures.json | xargs)
             for proj in $failed_projects; do
