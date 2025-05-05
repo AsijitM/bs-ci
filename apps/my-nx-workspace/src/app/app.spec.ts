@@ -23,7 +23,7 @@ describe('GET /', () => {
     const res = await axios.get('http://localhost:3000/');
 
     expect(res.status).toBe(200);
-    expect(res.data).toEqual({ message: 'Hello API' });
+    expect(res.data).toEqual({ message: 'Hello APIS' });
   });
 
   it('flaky test - sometimes fails due to timing', async () => {
