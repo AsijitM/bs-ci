@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
 describe('GET /', () => {
@@ -48,6 +48,24 @@ describe('GET /', () => {
       expect(response.data).toEqual({ data: 'Delayed response' });
     } catch (error) {
       fail('Request should not timeout');
+    }
+  });
+
+  it('should handle API errors correctly', async () => {
+    const errorResponse = {
+      message: 'Resource not found',
+      code: 'NOT_FOUND'
+    };
+
+    mock.onGet('http://localhost:3000/not-found').reply(404, errorResponse);
+
+    try {
+      await axios.get('http://localhost:3000/not-found');
+      fail('Expected request to fail');
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      expect(axiosError.response?.status).toBe(404);
+      expect(axiosError.response?.data).toEqual(errorResponse);
     }
   });
 });
