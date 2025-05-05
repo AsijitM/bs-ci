@@ -32,16 +32,3 @@ jobs:
 
       - name: Run affected tests
         run: npx nx affected -t lint test build --configuration=ci
-
-      - name: Retry flaky tests
-        if: ${{ always() }}
-        run: |
-          echo "Checking for flaky tests..."
-          # Simulated retry logic. Replace with your real test reporting
-          if [ -f jest-failures.json ]; then
-            failed_projects=$(jq -r '.testResults[] | select(.status=="failed") | .name' jest-failures.json | xargs)
-            for proj in $failed_projects; do
-              echo "Re-running flaky test for $proj"
-              npx nx test $proj --configuration=ci
-            done
-          fi
